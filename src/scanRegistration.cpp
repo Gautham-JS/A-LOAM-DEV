@@ -96,7 +96,7 @@ std::vector<ros::Publisher> pubEachScan;
 
 bool PUB_EACH_LINE = false;
 
-double MINIMUM_RANGE = 50;
+double MINIMUM_RANGE = 100;
 
 Eigen::Matrix4d T_B_Bl;
 
