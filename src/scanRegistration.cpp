@@ -94,15 +94,10 @@ ros::Publisher pubSurfPointsLessFlat;
 ros::Publisher pubRemovePoints;
 std::vector<ros::Publisher> pubEachScan;
 
-int getEnvVar( std::string const & key ) const
-{
-    char * val = getenv( key.c_str() );
-    return val == NULL ? atoi(std::string("0.01").c_str()) : atoi(std::string(val).c_str());
-}
 
 bool PUB_EACH_LINE = false;
 
-double MINIMUM_RANGE = getEnvVar("ALOAM_MIN_RANGE");
+double MINIMUM_RANGE = 0.1;
 
 Eigen::Matrix4d T_B_Bl;
 
