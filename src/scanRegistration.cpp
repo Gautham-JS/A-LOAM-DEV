@@ -98,7 +98,7 @@ std::vector<ros::Publisher> pubEachScan;
 bool PUB_EACH_LINE = false;
 
 double MINIMUM_RANGE = 0.1;
-double MAX_RANGE = 11;
+double MAX_RANGE = 10;
 
 Eigen::Matrix4d T_B_Bl;
 
