@@ -126,6 +126,7 @@ void removeClosedPointCloudFar(const pcl::PointCloud<PointT> &cloud_in,
     {
         cloud_out.points.resize(j);
     }
+    printf("Removing far pts\n");
 
     cloud_out.height = 1;
     cloud_out.width = static_cast<uint32_t>(j);
