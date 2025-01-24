@@ -104,7 +104,7 @@ Eigen::Matrix4d T_B_Bl;
 
 
 inline bool is_out_of_range(float metric, float u_thresh, float l_thresh) {
-    return (metric > u_thresh * u_thresh) && (metric < l_thresh * l_thresh);
+    return (metric > u_thresh * u_thresh) || (metric < l_thresh * l_thresh);
 }
 
 template <typename PointT>
