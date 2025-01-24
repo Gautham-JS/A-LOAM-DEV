@@ -103,6 +103,42 @@ double MAX_RANGE = 12;
 Eigen::Matrix4d T_B_Bl;
 
 
+inline bool is_out_of_range(float metric, float u_thresh, float l_thresh) {
+    return (metric > u_thresh * u_thresh) && (metric < l_thresh * l_thresh);
+}
+
+template <typename PointT>
+void clipPointCloudInRange(const pcl::PointCloud<PointT> &cloud_in,
+                              pcl::PointCloud<PointT> &cloud_out, float l_thresh, float u_thresh)
+{
+    if (&cloud_in != &cloud_out)
+    {
+        cloud_out.header = cloud_in.header;
+        cloud_out.points.resize(cloud_in.points.size());
+    }
+
+    size_t j = 0;
+
+    for (size_t i = 0; i < cloud_in.points.size(); ++i)
+    {
+        float metric = cloud_in.points[i].x * cloud_in.points[i].x 
+                            + cloud_in.points[i].y * cloud_in.points[i].y 
+                            + cloud_in.points[i].z * cloud_in.points[i].z;
+        if (is_out_of_range(metric, u_thresh, l_thresh))
+            continue;
+        cloud_out.points[j] = cloud_in.points[i];
+        j++;
+    }
+    if (j != cloud_in.points.size())
+    {
+        cloud_out.points.resize(j);
+    }
+
+    cloud_out.height = 1;
+    cloud_out.width = static_cast<uint32_t>(j);
+    cloud_out.is_dense = true;
+}
+
 template <typename PointT>
 void removeClosedPointCloudFar(const pcl::PointCloud<PointT> &cloud_in,
                               pcl::PointCloud<PointT> &cloud_out, float thres)
@@ -192,8 +228,8 @@ void laserCloudHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg)
     std::vector<int> indices;
 
     pcl::removeNaNFromPointCloud(laserCloudIn, laserCloudIn, indices);
-    removeClosedPointCloud(laserCloudIn, laserCloudIn, MINIMUM_RANGE);
-    removeClosedPointCloudFar(laserCloudIn, laserCloudIn, MAX_RANGE);
+    //removeClosedPointCloud(laserCloudIn, laserCloudIn, MINIMUM_RANGE);
+    clipPointCloudInRange(laserCloudIn, laserCloudIn, MINIMUM_RANGE, MAX_RANGE);
 
 
     int cloudSize  = laserCloudIn.points.size();
